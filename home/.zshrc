@@ -64,7 +64,7 @@ ZSH_THEME="macovsky"
 # HIST_STAMPS="mm/dd/yyyy"
 
 # Would you like to use another custom folder than $ZSH/custom?
-# ZSH_CUSTOM=/path/to/new-custom-folder
+ZSH_CUSTOM=/usr/share/zsh/
 
 # Which plugins would you like to load?
 # Standard plugins can be found in $ZSH/plugins/
@@ -74,11 +74,16 @@ ZSH_THEME="macovsky"
 plugins=(
   zsh-autosuggestions
   git
+  vi-mode
 )
 
 source $ZSH/oh-my-zsh.sh
 
 # User configuration
+
+autoload -Uz compinit promptinit
+compinit
+promptinit
 
 # export MANPATH="/usr/local/man:$MANPATH"
 
@@ -107,3 +112,5 @@ source $ZSH/oh-my-zsh.sh
 # alias zshconfig="mate ~/.zshrc"
 # alias ohmyzsh="mate ~/.oh-my-zsh"
 eval "$(fnm env --use-on-cd --shell zsh)"
+
+source <(fzf --zsh)
