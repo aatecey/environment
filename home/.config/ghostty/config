@@ -1,0 +1,12 @@
+cursor-style = block
+shell-integration-features = no-cursor
+font-family = TX-02
+font-size = 14
+term=xterm-256color
+window-width = 100000
+window-height = 100000
+theme = OneHalfDark
+gtk-adwaita = false
+gtk-titlebar = false
+confirm-close-surface = false
+copy-on-select = clipboard

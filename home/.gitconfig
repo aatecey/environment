@@ -1,0 +1,7 @@
+[user]
+	email = atecey@gmail.com
+	name = Aaron Tecey
+[pull]
+	ff = only
+[rerere]
+	enabled = true
