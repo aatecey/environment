@@ -1,7 +1,7 @@
 // -*- mode: jsonc -*-
 [
   {
-    "output": ["eDP-1", "HDMI-A-1", "DP-1"],
+    "output": ["eDP-1", "HDMI-A-1", "DP-1", "DP-3"],
     // "layer": "top", // Waybar at top layer
     // "position": "bottom", // Waybar position (top|bottom|left|right)
     // "height": 24, // Waybar height (to be removed for auto height)

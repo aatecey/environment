@@ -114,3 +114,6 @@ promptinit
 eval "$(fnm env --use-on-cd --shell zsh)"
 
 source <(fzf --zsh)
+
+# sst
+export PATH=/home/$HOST/.sst/bin:$PATH
