@@ -117,3 +117,48 @@ source <(fzf --zsh)
 
 # sst
 export PATH=/home/$HOST/.sst/bin:$PATH
+
+# bun completions
+[ -s "~/.bun/_bun" ] && source "~/.bun/_bun"
+
+# bun
+export BUN_INSTALL="$HOME/.bun"
+export PATH="$BUN_INSTALL/bin:$PATH"
+#
+# added by Particle CLI
+# add home bin directory to PATH if it exists
+if [ -d "$HOME/bin" ] ; then
+    PATH="$HOME/bin:$PATH"
+fi
+
+export ANDROID_HOME=$HOME/Android/Sdk
+export PATH=$PATH:$ANDROID_HOME/emulator
+export PATH=$PATH:$ANDROID_HOME/platform-tools
+
+use-arm-gcc() {
+  case "$1" in
+    "10")
+      export PATH=$(echo $PATH | sed 's|:[^:]*gcc-arm[^:]*||g; s|^[^:]*gcc-arm[^:]*:||g')
+      export PATH=~/gcc-arm/gcc-arm-none-eabi-10.3-2021.10/bin:$PATH
+      echo "Switched to ARM GCC 10"
+      ;;
+    "9")
+      export PATH=$(echo $PATH | sed 's|:[^:]*gcc-arm[^:]*||g; s|^[^:]*gcc-arm[^:]*:||g')
+      export PATH=~/gcc-arm/gcc-arm-none-eabi-9-2019-q4-major/bin:$PATH
+      echo "Switched to ARM GCC 9"
+      ;;
+    "5")
+      export PATH=$(echo $PATH | sed 's|:[^:]*gcc-arm[^:]*||g; s|^[^:]*gcc-arm[^:]*:||g')
+      export PATH=~/gcc-arm/gcc-arm-none-eabi-5_3-2016q1/bin:$PATH
+      echo "Switched to ARM GCC 5"
+      ;;
+    "none")
+      # Simple sed to remove only gcc-arm paths
+      export PATH=$(echo $PATH | sed 's|:[^:]*gcc-arm[^:]*||g; s|^[^:]*gcc-arm[^:]*:||g')
+      echo "Removed ARM GCC from PATH"
+      ;;
+    *)
+      echo "Unknown version. Available versions: 9, none"
+      ;;
+  esac
+}

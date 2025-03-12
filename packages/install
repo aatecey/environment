@@ -4,5 +4,5 @@ GROUP=dev
 for file in ./group/$GROUP/*; do
 	echo "installing $file"
 	sudo pacman -D --asexplicit - < "$file"
-	yay -S --noconfirm --asexplicit --needed - < "$file"
+	yay -S --asexplicit --needed - < "$file"
 done

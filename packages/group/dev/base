@@ -51,3 +51,6 @@ bluez
 bluez-utils
 bluetui
 hyprshot
+jdk21-openjdk
+jdk17-openjdk
+android-studio
