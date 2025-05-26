@@ -18,7 +18,7 @@ pipewire
 wireplumber
 qt5-wayland
 qt6-wayland
-xdg-desktop-portal-hyprland-git
+xdg-desktop-portal-hyprland
 waybar
 swaync
 jq

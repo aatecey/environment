@@ -162,3 +162,7 @@ use-arm-gcc() {
       ;;
   esac
 }
+
+. "$HOME/.local/share/../bin/env"
+
+export PATH=$HOME/.opencode/bin:$PATH

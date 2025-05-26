@@ -52,6 +52,19 @@ return {
 
       opts.desc = "Restart LSP"
       keymap.set("n", "<leader>rs", ":LspRestart<CR>", opts) -- mapping to restart lsp if necessary
+
+      vim.api.nvim_create_autocmd("LspAttach", {
+        group = vim.api.nvim_create_augroup('lsp_attach_disable_ruff_hover', { clear = true }),
+        callback = function()
+          if client == nil then
+            return
+          end
+          if client.name == 'ruff' then
+            client.server_capabilities.hoverProvider = false
+          end
+        end,
+        desc = 'LSP: Disable hover capability from Ruff',
+      })
     end
 
     local capabilities = cmp_nvim_lsp.default_capabilities()
@@ -184,5 +197,25 @@ return {
         },
       },
     })
+
+    lspconfig["ruff"].setup({
+      capabilities = capabilities,
+      on_attach = on_attach,
+    })
+
+    lspconfig["pyright"].setup {
+      capabilities = capabilities,
+      on_attach = on_attach,
+      settings = {
+        pyright = {
+          disableOrganizeImports = true,
+        },
+        python = {
+          analysis = {
+            ignore = { '*' },
+          },
+        },
+      },
+    }
   end,
 }
