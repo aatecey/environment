@@ -83,6 +83,13 @@ return {
     lspconfig["ts_ls"].setup({
       capabilities = capabilities,
       on_attach = on_attach,
+      settings = {
+        typescript = {
+          tsserver = {
+            maxTsServerMemory = 12288
+          },
+        },
+      },
     })
 
     lspconfig["cssls"].setup({
@@ -121,6 +128,9 @@ return {
       capabilities = capabilities,
       settings = {
         tailwindCSS = {
+          includeLanguages = {
+            templ = "html",
+          },
           classAttributes = {
             "class",
             "className",
@@ -176,6 +186,11 @@ return {
     })
 
     lspconfig["gopls"].setup({
+      capabilities = capabilities,
+      on_attach = on_attach,
+    })
+
+    lspconfig["templ"].setup({
       capabilities = capabilities,
       on_attach = on_attach,
     })

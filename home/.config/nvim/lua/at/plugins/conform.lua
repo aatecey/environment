@@ -88,6 +88,7 @@ return {
         h = { "clang-format" },
         c = { "clang-format" },
         go = { "gofmt", "goimports" },
+        templ = { "templ" },
       },
       format_on_save = {
         timeout_ms = 500,
@@ -136,4 +137,3 @@ return {
     })
   end,
 }
-

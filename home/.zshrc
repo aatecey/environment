@@ -166,3 +166,4 @@ use-arm-gcc() {
 . "$HOME/.local/share/../bin/env"
 
 export PATH=$HOME/.opencode/bin:$PATH
+export PATH="$HOME/go/bin:$PATH"
