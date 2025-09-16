@@ -13,7 +13,6 @@ hyprpaper
 hyprpicker
 hyprlock
 hyprpolkitagent
-walker
 pipewire
 wireplumber
 qt5-wayland
@@ -54,3 +53,4 @@ hyprshot
 jdk21-openjdk
 jdk17-openjdk
 android-studio
+rofi
