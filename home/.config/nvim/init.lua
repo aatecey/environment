@@ -221,6 +221,7 @@ vim.pack.add({
   'https://github.com/mason-org/mason.nvim',
   'https://github.com/stevearc/oil.nvim',
   'https://github.com/nvim-tree/nvim-web-devicons',
+  'https://github.com/lewis6991/gitsigns.nvim',
   'https://github.com/stevearc/conform.nvim',
   'https://github.com/folke/snacks.nvim',
   'https://github.com/numToStr/Comment.nvim',
@@ -234,6 +235,36 @@ require('onedark').setup({ transparent = true })
 require('onedark').load()
 
 require('nvim-web-devicons').setup({})
+require('gitsigns').setup({
+  on_attach = function(bufnr)
+    local gitsigns = require('gitsigns')
+
+    local function map(mode, lhs, rhs, desc)
+      vim.keymap.set(mode, lhs, rhs, { buffer = bufnr, desc = desc })
+    end
+
+    map('n', ']c', function()
+      if vim.wo.diff then
+        vim.cmd.normal({ ']c', bang = true })
+      else
+        gitsigns.nav_hunk('next')
+      end
+    end, 'Next git hunk')
+
+    map('n', '[c', function()
+      if vim.wo.diff then
+        vim.cmd.normal({ '[c', bang = true })
+      else
+        gitsigns.nav_hunk('prev')
+      end
+    end, 'Previous git hunk')
+
+    map('n', '<leader>hs', gitsigns.stage_hunk, 'Stage git hunk')
+    map('n', '<leader>hr', gitsigns.reset_hunk, 'Reset git hunk')
+    map('n', '<leader>hp', gitsigns.preview_hunk, 'Preview git hunk')
+    map('n', '<leader>hb', gitsigns.blame_line, 'Blame current line')
+  end,
+})
 
 require('vim._extui').enable({})
 
@@ -330,6 +361,13 @@ local function get_javascript_formatter()
     start_path = vim.fn.getcwd()
   end
 
+  -- Check for oxfmt config files up the file tree
+  local oxfmt_configs = {
+    ".oxfmtrc.json",
+    ".oxfmtrc.jsonc",
+  }
+  local has_oxfmt = find_config_file(oxfmt_configs, start_path) ~= nil
+
   -- Check for biome.json up the file tree
   local biome_configs = { "biome.json", "biome.jsonc" }
   local has_biome = find_config_file(biome_configs, start_path) ~= nil
@@ -348,12 +386,14 @@ local function get_javascript_formatter()
   local has_prettier = find_config_file(prettier_configs, start_path) ~= nil
 
   -- Prioritize based on found config files
-  if has_biome and not has_prettier then
+  if has_oxfmt then
+    return { "oxfmt" }
+  elseif has_biome and not has_prettier then
     return { "biome-check" }
   elseif has_prettier and not has_biome then
     return { "prettierd" }
   else
-    -- If both or none are found, prefer prettierd then biome as fallback
+    -- If none are found, prefer prettierd then biome as fallback
     return { "prettierd", "biome-check" }
   end
 end
