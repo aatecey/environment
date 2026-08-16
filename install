@@ -1,3 +1,61 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
-stow -R -v -t ~ -d ~/dev/environment/home .
+set -euo pipefail
+
+repo_dir="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)"
+package_dir="$repo_dir/home"
+backup_dir="$HOME/.local/state/environment/backups/$(date +%Y%m%d%H%M%S)"
+backup_created=false
+moved_paths=()
+linked_targets=()
+
+rollback() {
+  local status=$?
+
+  for target in "${linked_targets[@]}"; do
+    rm -f -- "$target"
+  done
+
+  for relative_path in "${moved_paths[@]}"; do
+    target="$HOME/$relative_path"
+    mkdir -p -- "$(dirname -- "$target")"
+    mv -- "$backup_dir/$relative_path" "$target"
+  done
+
+  exit "$status"
+}
+
+trap rollback ERR
+
+while IFS= read -r -d '' source; do
+  relative_path="${source#"$package_dir"/}"
+  target="$HOME/$relative_path"
+
+  if [[ -L "$target" ]] &&
+    [[ "$(readlink -f -- "$target")" == "$(readlink -f -- "$source")" ]]; then
+    continue
+  fi
+
+  if [[ -e "$target" || -L "$target" ]]; then
+    backup_target="$backup_dir/$relative_path"
+    mkdir -p -- "$(dirname -- "$backup_target")"
+    mv -- "$target" "$backup_target"
+    moved_paths+=("$relative_path")
+    backup_created=true
+  fi
+
+  mkdir -p -- "$(dirname -- "$target")"
+  ln -s -- "$source" "$target"
+  linked_targets+=("$target")
+done < <(find "$package_dir" -type f -print0)
+
+trap - ERR
+
+if $backup_created; then
+  printf 'Previous files backed up to %s\n' "$backup_dir"
+fi
+
+if hyprctl instances -j >/dev/null 2>&1; then
+  hyprctl reload
+  hyprctl configerrors
+fi

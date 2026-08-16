@@ -266,8 +266,6 @@ require("gitsigns").setup({
 	end,
 })
 
-require("vim._extui").enable({})
-
 require("snacks").setup({
 	picker = { enabled = true },
 })
